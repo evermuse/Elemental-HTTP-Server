@@ -2,6 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var qs = require('querystring');
 var url = require('url');
+var buildPage = require('./template');
 
 var PORT = 3000;
 
@@ -23,18 +24,13 @@ var server = http.createServer(function(request, response) {
 
     var newPage = qs.parse(dataBuffer.toString());
 
-    var formattedPage =
-
-    console.log('the new page info is right here', newPage);
-
-    //console.log('the url path is right here', urlObj);
-
     if (urlObj.path === '/elements' && request.method === 'POST' ) {
 
-      fs.writeFile('public/' + newPage.elementName.toLowerCase() + '.html', JSON.stringify(newPage), function(err) {
+      fs.writeFile('public/' + newPage.elementName.toLowerCase() + '.html', buildPage(newPage), function(err) {
 
-        //return json object success is true
-        response.end();
+        response.writeHead(200, { 'Content-Type' : 'application/json' });
+
+        response.end(JSON.stringify({ 'success' : true } ));
 
       });
 
@@ -44,7 +40,7 @@ var server = http.createServer(function(request, response) {
 
         //if (err) throw new Error('could not find request page');
 
-        response.end(data);
+        response.end(data); //put long string of template js here
 
       });
 
