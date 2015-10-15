@@ -5,7 +5,8 @@ var url = require('url');
 
 //template module to format the JSON POST data into a newly formatted page
 
-var buildPage = require('./template');
+var buildElementPage = require('./templates/newElement');
+var buildIndexPage = require('./templates/index');
 
 //declare the port
 
@@ -39,11 +40,19 @@ var server = http.createServer(function(request, response) {
 
     if (urlObj.path === '/elements' && request.method === 'POST' ) {
 
-      fs.writeFile('public/' + newPage.elementName.toLowerCase() + '.html', buildPage(newPage), function(err) {
+      fs.writeFile('public/' + newPage.elementName.toLowerCase() + '.html', buildElementPage(newPage), function(err) {
+
+        //make error
 
         response.writeHead(200, { 'Content-Type' : 'application/json' });
 
         response.end(JSON.stringify({ 'success' : true } ));
+
+        fs.writeFile('public/index.html', buildIndexPage(newPage.elementName), function(err) {
+
+          if (err) throw err.message;
+
+        });
 
       });
 
@@ -52,8 +61,6 @@ var server = http.createServer(function(request, response) {
       //read the files
 
       fs.readFile('./public' + urlObj.path, function(err, data) {
-
-        //test if the file exists and throw error if not
 
         if (err) {
 
@@ -64,6 +71,12 @@ var server = http.createServer(function(request, response) {
             response.end(data);
 
           });
+
+        }
+
+        if (urlObj.path === '/index.html' || urlObj.path === '' ) {
+
+          buildIndexPage();
 
         }
 
