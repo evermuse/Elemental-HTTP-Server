@@ -56,6 +56,26 @@ var server = http.createServer(function(request, response) {
 
       });
 
+    } else if (request.method === 'PUT') {
+
+      fs.readdir('./public', function(err, file) {
+
+        if (err) throw err.message;
+
+        if (urlObj.path) {
+
+          fs.writeFile('public/' + newPage.elementName.toLowerCase() + '.html', buildElementPage(newPage), function(err) {
+
+            response.writeHead(200, { 'Content-Type' : 'application/json' });
+
+            response.end(JSON.stringify({ 'success' : true } ));
+
+          });
+
+        }
+
+      });
+
     } else {
 
       //read the files
@@ -89,6 +109,8 @@ var server = http.createServer(function(request, response) {
   });
 
 });
+
+//listen
 
 server.listen(PORT, function() {
 
