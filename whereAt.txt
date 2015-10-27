@@ -1,3 +1,3 @@
 In the midst of refactoring the requestHandler functionality into it's own file per Jon's gist here:
 
-https://github.com/evermuse/Elemental-HTTP-Server/blob/dd245a676abf8150b48e376ca37c75a0d8d840f4/server.js
+https://gist.github.com/theRemix/5995467c9884e463871a
