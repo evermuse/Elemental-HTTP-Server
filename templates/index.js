@@ -30,7 +30,7 @@ fs.readdir('./public', function(err, files) {
 
 //element list is rendered from array
 
-function renderList() {
+function renderList(elements) {
 
   return elements.map(function(element) {
 
@@ -42,15 +42,27 @@ function renderList() {
 
 }
 
-var buildIndexPage = function buildIndexPage(elementName) {
+var buildIndexPage = function buildIndexPage(elementName, deleteTrue) {
 
-  if (elementName) {
+  if (elementName && deleteTrue) {
+
+    elements = elements.filter(function(current) {
+
+      if (current !== elementName) {
+
+        return current;
+
+      }
+
+    });
+
+  } else if (elementName) {
 
     elements.push(elementName);
 
   }
 
-  return '<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <title>The Elements</title> <link rel="stylesheet" href="/css/styles.css"> </head> <body> <h1>The Elements</h1> <h2>These are all the known elements.</h2> <h3>These are ' + elements.length + '</h3> <ol>' + renderList() + ' </ol> </body> </html>';
+  return '<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <title>The Elements</title> <link rel="stylesheet" href="/css/styles.css"> </head> <body> <h1>The Elements</h1> <h2>These are all the known elements.</h2> <h3>These are ' + elements.length + '</h3> <ol>' + renderList(elements) + ' </ol> </body> </html>';
 
 };
 
